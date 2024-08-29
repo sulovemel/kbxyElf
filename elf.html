@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>妖怪详情-卡布西游</title>
+        <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+        <link rel="stylesheet" href="./css/elf.css" />
+        <link rel="stylesheet" href="./css/style.css" />
+        <script src="./js/handlebars4.7.8.min.js"></script>
+    </head>
+    <body>
+        <div class="dp"></div>
+        <div class="box">
+            <div class="content">
+                <p class="center warn">数据库内没有对应的妖怪！</p>
+            </div>
+            <div class="footer">
+                <span style="color: red">声明</span
+                >：本站点数据源于公开资料，所供内容仅供参考，不构成任何形式建议、指导或担保。依据本网站内容做决策前，请自行判断准确性、完整性和适用性，风险后果自负。
+                <hr class="hr-space-square" />
+                <p style="margin: 1rem 0" title="iovel@foxmail.com">
+                    刊误：iovel@foxmail.com
+                </p>
+                <p style="margin: 1rem 0 3rem 0" title="iovel@foxmail.com">
+                    Copyright©2024 Mr.Guo
+                </p>
+            </div>
+        </div>
+    </body>
+    <script id="table-template" type="text/x-handlebars-template">
+            <h1>卡布西游{{clan.clan_name}}技能表</h1>
+            <p class="source center">
+                <span>作者：{{clan.clan_author}}</span>
+                <span>来源：{{clan.clan_source}}</span>
+                <span>时间：{{clan.clan_time}}</span>
+            </p>
+            <table class='elf-info'>
+                <tbody>
+                    <tr>
+                        <td class='center'colspan='{{ r }}'>卡布西游{{clan.clan_name}}技能表</td>
+                    </tr>
+                    <tr>
+                        <td colspan='{{ r }}'class='center'>
+                            <div class='img-box'>
+                                <img class='elf-img'src='{{o_url.c}}'/>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        {{#each elf}}
+                            <td>序号：{{elf_id}}</td>
+                        {{/each}}</tr>
+                    <tr>
+                        {{#each elf}}
+                            <td>名称：{{elf_name}}</td>
+                        {{/each}}
+                    </tr>
+                    <tr>{{#each elf}}
+                        <td>组别：{{elf_group}}</td>{{/each}}
+                    </tr>
+                    <tr>
+                        {{#each elf}}
+                            <td>系别：{{elf_department}}</td>
+                        {{/each}}
+                    </tr>
+                    <tr>
+                        {{#each elf}}
+                            <td>进化等级：{{#if (isNonPositive elf_el)}}无{{else}}{{elf_el}}{{/if}}</td>
+                    {{/each}}
+                    </tr>
+                    <tr>{{#each elf}}<td>介绍：{{elf_info_web}}</td>{{/each}}</tr>
+                    <tr>{{#each elf}}<td>获得：{{elf_lie}}</td>{{/each}}</tr>
+                    <tr>{{#each elf}}<td>身高/体重：{{elf_height}}/ {{ elf_weight }}</td>{{/each}}</tr>
+                    <tr><td colspan='{{ r }}'>极品性格：{{clan.clan_character}}</td></tr>
+                    <tr><td colspan='{{ r }}'>推荐修为：{{clan.clan_quality}}</td></tr>
+                    <tr><td colspan='{{ r }}'>配招推荐：{{clan.clan_moves}}</td></tr>
+                    <tr><td colspan='{{ r }}'>珍贵程度：{{clan.clan_rarity}}</td></tr>
+                    <tr>
+                        <td colspan='{{ r }}'class='center'style='padding: 0.5rem 1rem'>
+                            <div class='race-box'>
+                                <table class='race'>
+                                    <caption>种族值</caption>
+                                    <thead>
+                                        <tr>
+                                            <th>妖怪名</th><th>体力</th><th>速度</th><th>攻击</th><th>防御</th><th>法术</th><th>抗性</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each elf}}
+                                        <tr>
+                                            <td>{{elf_name}}</td>
+                                            <td>{{elf_strength}}</td>
+                                            <td>{{elf_speed}}</td>
+                                            <td>{{elf_atk}}</td>
+                                            <td>{{elf_defense}}</td>
+                                            <td>{{elf_magic}}</td>
+                                            <td>{{elf_resistance}}</td>
+                                        </tr>{{/each}}
+                                    </tbody>
+                                </table>
+                                <div class='race-count'>总和：{{race_count}}</div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan='{{ r }}'style='padding: 0.5rem 1rem'>
+                            <table class='elf-skills'>
+                                <caption>技能表</caption>
+                                <thead>
+                                    <tr>
+                                        <th>技能名称</th><th>等级</th><th colspan='2'>技能属性/类型</th><th>威力</th><th>PP</th><th class="des">技能描述</th>
+                                    </tr>
+                                </thead>
+                                <tbody class='elf-skills-body'>
+                                    {{#each skill}}
+                                        <tr>
+                                            <td class="{{#if (isZero type) }}{{else}}skill-type{{/if}}">{{n}}</td>
+                                            <td>{{lv}}</td>
+                                            <td>{{s}}</td>
+                                            <td>{{#if (isZero t)}}物理{{else}}技能{{/if}}</td>
+                                            <td>{{p}}</td>
+                                            <td>{{pp}}</td>
+                                            <td>{{d}}</td>
+                                        </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan='{{ r }}'style='padding: 1.5rem 1rem'>小编点评：{{clan.clan_appraise}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan='{{ r }}'style='padding: 1.5rem 1rem'>友情链接：<a href="{{ o_url.p }}"target="_blank"title="©4399卡布西游">{{clan.clan_name}}原始页面</a>、<a target="_blank"href="https://sulovemel.github.io/kbxyMC/"title="©Author Mr.Guo">妖怪计算器</a>、<a target="_blank"href="https://my.4399.com/forums/mtag-79936"title="©4399卡布西游">卡布西游论坛</a>、<a target="_blank"title="©bilibili 浩愛"href="https://space.bilibili.com/18218735">浩愛</a>、<a target="_blank"title="©bilibili 几度风华A"href="https://space.bilibili.com/164520376">几度风华A</a></td>
+                    </tr>
+                </tr>
+            </tbody>
+        </table>
+    </script>
+    <script async src="./js/skill_refs.js"></script>
+    <script async src="./js/skills.js"></script>
+    <script async src="./js/url_data.js"></script>
+    <script>
+        function getQueryParams() {
+            const queryString = window.location.search;
+            const regex = /([^?=&]+)=([^&]*)/g;
+            let match;
+            const params = {};
+            while ((match = regex.exec(queryString))) {
+                params[match[1]] = decodeURIComponent(match[2]);
+            }
+            return params;
+        }
+        async function loadJSON(url) {
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error!status:${response.status}`);
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error(
+                    'There was a problem loading the JSON file:',
+                    error
+                );
+            }
+        }
+        function setPageTitle(title) {
+            document.title = `${title}妖怪详情-卡布西游`;
+        }
+        var source = document.getElementById('table-template').innerHTML;
+        var template = Handlebars.compile(source);
+        Handlebars.registerHelper('isZero', function (value) {
+            return value * 1 === 0;
+        });
+        Handlebars.registerHelper('isNonPositive', function (value) {
+            return value * 1 <= 0;
+        });
+        function getSkillsList(name) {
+            const skill_ref = skill_refs[name];
+            if (!skill_ref) return;
+            return skill_ref.map(item => {
+                return { ...item, ...(skills[item.id] || {}) };
+            });
+        }
+        function getUrlData(name) {
+            let o_url = url_data[name];
+            if (name === '利爪松鼠') {
+                return { p: '#', c: './images/141P3462U0.jpg' };
+            }
+            return {
+                p: 'https://news.4399.com' + o_url.p,
+                c: 'https://newsimg.5054399.com/uploads/userup/' + o_url.c,
+            };
+        }
+        function createHTml(clan, elf) {
+            const skill = getSkillsList(clan.clan_name);
+            const o_url = getUrlData(clan.clan_name);
+            setPageTitle(clan.clan_name);
+            const _t = clan.clan_time.toString().padEnd(13, '0');
+            clan.clan_time = new Date(parseInt(_t, 10))
+                .toISOString()
+                .replace('T', ' ')
+                .slice(0, 10);
+            elf.sort((a, b) => a.elf_evolve - b.elf_evolve);
+            const r = elf.length;
+            const {
+                elf_strength: a,
+                elf_speed: b,
+                elf_atk: c,
+                elf_defense: d,
+                elf_magic: e,
+                elf_resistance: f,
+            } = elf[r - 1];
+            const race_count = a + b + c + d + e + f;
+            var html = template({ skill, clan, elf, r, race_count, o_url });
+            document.querySelector('.content').innerHTML = html;
+        }
+        async function filterJSONData(clan_id) {
+            const elfList = await loadJSON(
+                'json/kbxy_web_elf_data_compress.json'
+            );
+            const clanList = await loadJSON(
+                'json/kbxy_web_clan_data_compress.json'
+            );
+            const clan = clanList.find(item => item.clan_id === clan_id);
+            const elf = elfList.filter(item => item.elf_clan === clan_id);
+            if (clan && elf) createHTml(clan, elf);
+        }
+        window.addEventListener('load', function () {
+            const queryParams = getQueryParams();
+            const clan_id = queryParams.clan * 1;
+            if (!(clan_id > 1)) return;
+            filterJSONData(clan_id);
+        });
+    </script>
+</html>
